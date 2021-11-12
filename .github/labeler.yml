@@ -1,2 +1,2 @@
-enhancment:
+enhancement:
 - any: ['src/**/*', '!src/docs/*']
