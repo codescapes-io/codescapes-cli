@@ -1,5 +1,6 @@
-import { CSStorageUnit } from "./CSData";
+import { CSStorageUnit, CSVariableValue } from './CSData';
 
 export {
-    CSStorageUnit
-}
+    CSStorageUnit,
+    CSVariableValue,
+};

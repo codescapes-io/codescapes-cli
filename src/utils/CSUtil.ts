@@ -1,8 +1,7 @@
-import * as fs from 'fs-extra';
-import os from 'os';
-import path, { basename } from 'path';
+import fs from 'fs-extra';
+import path from 'path';
 import walk from 'walk-sync';
-import { CSStorageUnit } from '../common';
+import { CSStorageUnit } from '../common/index.js';
 
 /**
  * Utils function
@@ -36,14 +35,20 @@ class CSUtil {
   }
 
   public static getTemplateContentPaths(strName: string,): CSStorageUnit[] | null {
-    if (!fs.existsSync(path.join(CSUtil.strTemplatesPath, strName))) {
+    const strPath2 = path.resolve(strName);
+    console.log('path', strPath2);
+
+    const bFound = fs.existsSync(strPath2);
+    console.log('found', bFound);
+
+    if (!bFound) {
       return null;
     }
 
-    const trees = walk(path.join(CSUtil.strTemplatesPath, strName));
+    const trees = walk(strPath2);
     const tree: CSStorageUnit[] = trees.map(strPath => {
-      const bIsDirectory = fs.lstatSync(path.join(CSUtil.strTemplatesPath, strName, strPath)).isDirectory();
-      const strFullPath = path.join(CSUtil.strTemplatesPath, strName, strPath);
+      const bIsDirectory = fs.lstatSync(path.join(strPath2, strPath)).isDirectory();
+      const strFullPath = path.join(strPath2, strPath);
 
       let strContent = '';
       if (!bIsDirectory) {

@@ -1,4 +1,4 @@
-import CSInitialize from './CSInitialize';
+import CSInitialize from './CSInitialize.js';
 
 export {
     CSInitialize

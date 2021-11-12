@@ -13,5 +13,5 @@ export interface CSStorageUnit {
 
 export interface CSVariableValue {
     strName: string;
-    strValue: string;
+    strValue: unknown;
 }

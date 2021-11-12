@@ -4,55 +4,51 @@
  * 
  */
 
-import path from 'path/posix';
-import { CSVariableValue } from '../common/CSData';
-import CSUtil from '../utils/CSUtil';
+import { AnyFlags, TypedFlags } from 'meow';
+import path from 'path';
+import { CSVariableValue } from '../common';
+import CSUtil from '../utils/CSUtil.js';
 
 class CSInitialize {
-    private inputs: string[];
-    private;
+    private strTemplateName: string;
+    private strTargetDir: string;
+    private flags: TypedFlags<AnyFlags> & Record<string, unknown>;
 
-    constructor() {
+    constructor(strTemplateName: string, strTargetDir: string, flags: TypedFlags<AnyFlags> & Record<string, unknown>) {
+        this.flags = flags;
 
+        this.strTemplateName = strTemplateName;
+        this.strTargetDir = this.parseTargetDir(strTemplateName);
     }
 
-    public initialize(): boolean {
-        return true;
-    }
+    private parseTargetDir(strTemplateName: string): string {
+        const strTargetDirectory = strTemplateName;
 
-    public finalize(): boolean {
-        return true;
-    }
-
-    public run(input: any, ...flags): number {
-        const strTemplateName = input[0];
-
-        let strTargetDirectory = input[1];
         if (typeof strTargetDirectory === 'undefined') {
-            strTargetDirectory = process.cwd();
-        }
-        else {
-            strTargetDirectory = path.join(process.cwd(), strTargetDirectory);
+            return process.cwd();
         }
 
-        if (typeof strTemplateName === 'undefined') {
+        return path.join(process.cwd(), strTargetDirectory);
+    }
+
+    public run(): number {
+        if (typeof this.strTemplateName === 'undefined') {
             return 1;
         }
 
-        const tree = CSUtil.getTemplateContentPaths(strTemplateName);
+        const tree = CSUtil.getTemplateContentPaths(this.strTemplateName);
         if (tree === null) {
-            return 1;
+            return 2;
         }
 
         const variables: string[] = [];
 
-        const regex = new RegExp('{{(.*?)}}', 'gm');
+        const regexName = new RegExp('{{(.*?)}}', 'gm');
         const regexContent = /c{{(.*?)}}/gim;
-
-        for (const treeItem of tree!) {
+        for (const treeItem of tree) {
             // check file and folder names
 
-            const regexExecOnName = regex.exec(treeItem.strPath);
+            const regexExecOnName = regexName.exec(treeItem.strPath);
             if (regexExecOnName !== null) {
                 const varName = regexExecOnName[1].trimLeft().trimRight();
                 if (!variables.includes(varName)) {
@@ -78,18 +74,25 @@ class CSInitialize {
             }
         }
 
-        // Check which variables are already filled by flags.
         const filledVariables: CSVariableValue[] = variables.map(varString => {
             return {
                 strName: varString,
-                strValue: flags[varString] || ''
+                strValue: this.flags[varString] || ''
             };
         });
 
-        const getVar = (name: string) => {
+        const blankVariableNames: string[] = [];
+
+        for (const v of filledVariables) {
+            if (v.strValue === '') {
+                blankVariableNames.push(v.strName);
+            }
+        }
+
+        const getVar = (name: string): string => {
             for (const item of filledVariables) {
                 if (item.strName === name) {
-                    return item.strValue;
+                    return item.strValue as string;
                 }
             }
             return '';
@@ -98,23 +101,21 @@ class CSInitialize {
         // replace all variables inside of file and folder names
         for (const v of variables) {
             const regex = new RegExp('{{\\s*' + v + '\\s*}}', 'gm');
-            for (const treeItem of tree!) {
+            for (const treeItem of tree) {
                 treeItem.strPath = treeItem.strPath.replace(regex, getVar(v));
             }
         }
 
-        // replace all variables in all files' content
         for (const v of variables) {
-            // 'c' in front of the regex in order to prevent collisions with other mustache like syntax that may occur in boilerplate files
             const regex = new RegExp('c{{\\s*' + v + '\\s*}}', 'gm');
-            for (const treeItem of tree!) {
+            for (const treeItem of tree) {
                 if (treeItem.bIsDirectory === false) {
                     treeItem.strContent = treeItem.strContent.replace(regex, getVar(v));
                 }
             }
         }
 
-        CSUtil.generateStructureFromTree(tree, strTargetDirectory);
+        CSUtil.generateStructureFromTree(tree, this.strTargetDir);
 
         return 0;
     }

@@ -1,19 +1,17 @@
 #!/usr/bin/env node
 
-import meow from 'meow';
+import { Command } from 'commander';
+import { CSInitialize } from './commands/index.js';
 
-import { CSInitialize } from './commands';
-
-const cli = meow(`
-    Codescapes CLI
-
-    Commands:
-    - codescapes init <name> [targetDir]
-`);
-
-const pInit = new CSInitialize();
-pInit.initialize();
-const iStatus = pInit.run(cli.input, cli.flags);
-pInit.finalize();
-
-process.exit(iStatus);
+const program = new Command();
+program
+    .command('init')
+    .argument('<templateDir>')
+    .argument('<targetDir>')
+    .option('-p, --project <projectName>', 'project name')
+    .action((templateDir: string, targetDir: string, option) => {
+        const pInit = new CSInitialize(templateDir, targetDir, option);
+        const res = pInit.run();
+        process.exit(res);
+    });
+program.parse(process.argv);

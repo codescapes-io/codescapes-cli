@@ -2,38 +2,49 @@
   "name": "codescapes-cli",
   "version": "0.0.1",
   "description": "",
+  "private": true,
+  "exports": "./build/index.js",
   "bin": {
-    "codescapes": "./src/index.ts"
+    "codescapes": "./build/index.js"
   },
+  "engines": {
+    "node": ">=14.13.1"
+  },
+  "files": [
+    "/build"
+  ],
   "dependencies": {
-    "case": "^1.6.3",
     "commander": "^8.3.0",
-    "copy-dir": "^1.3.0",
     "fs-extra": "^10.0.0",
     "meow": "^10.1.1",
-    "replace-in-file": "^6.3.2",
     "walk-sync": "^3.0.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.22",
     "@types/fs-extra": "^9.0.13",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
+    "chai": "^4.3.4",
     "eslint": "^8.2.0",
     "mocha": "^9.1.3",
-    "nodemon": "^2.0.14",
     "ts-node": "^10.4.0",
-    "typedoc": "^0.22.8",
     "typescript": "^4.4.4"
   },
   "scripts": {
-    "start": "nodemon --watch 'bin/**/*.ts' --exec 'ts-node' bin/index.ts",
-    "lint": "eslint . --ext .ts",
-    "create": "npm run build && npm run test",
-    "build": "tsc -p .",
-    "local": "sudo npm i -g && pizza",
-    "refresh": "rm -rf ./node_modules ./package-lock.json && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node --loader ts-node/esm ./src/index.ts",
+    "test": "mocha",
+    "build": "tsc"
+  },
+  "mocha": {
+    "extension": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "spec": "test/**/*.test.ts"
   },
   "repository": {
     "type": "git",
