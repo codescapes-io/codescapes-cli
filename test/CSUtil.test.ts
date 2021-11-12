@@ -23,10 +23,6 @@ describe('testtttt', () => {
     });
 
     it('get template content paths', () => {
-
-        // const content = CSUtil.getTemplateContentPaths('./test/templates/template2');
-        // CSUtil.generateStructureFromTree(content as CSStorageUnit[], './results');
-
         const paths = path.resolve('./test/templates/template2');
         const paths2 = path.resolve('./test/result');
         const pInit = new CSInitialize(paths, paths2, { name: 'test2' });
