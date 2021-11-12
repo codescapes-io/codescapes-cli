@@ -34,7 +34,8 @@
   "scripts": {
     "start": "node --loader ts-node/esm ./src/index.ts",
     "test": "mocha",
-    "build": "tsc"
+    "build": "tsc",
+    "lint": "npx eslint --ext .ts src"
   },
   "mocha": {
     "diff": true,

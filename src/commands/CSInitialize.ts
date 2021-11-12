@@ -1,20 +1,19 @@
 /**
+ * Init command
  * 
- * 
- * 
+ * Created on 11/10/2021 by Reno Septa Pradana
  */
 
-import { AnyFlags, TypedFlags } from 'meow';
-import path from 'path';
+import { OptionValues } from 'commander';
 import { CSVariableValue } from '../common';
 import CSUtil from '../utils/CSUtil';
 
 class CSInitialize {
     private strTemplateName: string;
     private strTargetDir: string;
-    private flags: TypedFlags<AnyFlags> & Record<string, unknown>;
+    private flags: OptionValues;
 
-    constructor(strTemplateName: string, strTargetDir: string, flags: TypedFlags<AnyFlags> & Record<string, unknown>) {
+    constructor(strTemplateName: string, strTargetDir: string, flags: OptionValues) {
         this.flags = flags;
 
         this.strTemplateName = strTemplateName;
