@@ -45,8 +45,6 @@ class CSInitialize {
         const regexName = new RegExp('{{(.*?)}}', 'gm');
         const regexContent = /c{{(.*?)}}/gim;
         for (const treeItem of tree) {
-            // check file and folder names
-
             const regexExecOnName = regexName.exec(treeItem.strPath);
             if (regexExecOnName !== null) {
                 const varName = regexExecOnName[1].trimLeft().trimRight();
