@@ -38,6 +38,7 @@
     "build": "tsc"
   },
   "mocha": {
+    "diff": true,
     "extension": [
       "ts"
     ],

@@ -7,7 +7,7 @@
 import { AnyFlags, TypedFlags } from 'meow';
 import path from 'path';
 import { CSVariableValue } from '../common';
-import CSUtil from '../utils/CSUtil.js';
+import CSUtil from '../utils/CSUtil';
 
 class CSInitialize {
     private strTemplateName: string;
@@ -18,7 +18,7 @@ class CSInitialize {
         this.flags = flags;
 
         this.strTemplateName = strTemplateName;
-        this.strTargetDir = this.parseTargetDir(strTemplateName);
+        this.strTargetDir = this.parseTargetDir(strTargetDir);
     }
 
     private parseTargetDir(strTemplateName: string): string {
@@ -28,7 +28,7 @@ class CSInitialize {
             return process.cwd();
         }
 
-        return path.join(process.cwd(), strTargetDirectory);
+        return strTemplateName;
     }
 
     public run(): number {

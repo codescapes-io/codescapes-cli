@@ -31,15 +31,13 @@ class CSUtil {
   }
 
   public static isDirectoryExists(strDir: string): boolean {
-    return fs.pathExistsSync(path.join(process.cwd(), strDir));
+    const strPath = path.resolve(strDir);
+    return fs.pathExistsSync(strPath);
   }
 
-  public static getTemplateContentPaths(strName: string,): CSStorageUnit[] | null {
+  public static getTemplateContentPaths(strName: string): CSStorageUnit[] | null {
     const strPath2 = path.resolve(strName);
-    console.log('path', strPath2);
-
-    const bFound = fs.existsSync(strPath2);
-    console.log('found', bFound);
+    const bFound = CSUtil.isDirectoryExists(strPath2);
 
     if (!bFound) {
       return null;
@@ -69,9 +67,13 @@ class CSUtil {
 
   public static generateStructureFromTree(tree: CSStorageUnit[], strTargetDir: string): void {
     for (const item of tree) {
+      const spath = path.join(strTargetDir, item.strPath);
       if (!item.bIsDirectory) {
-        fs.ensureFileSync(path.join(strTargetDir, item.strFullPath));
-        fs.writeFileSync(path.join(strTargetDir, item.strFullPath), item.strContent);
+        fs.ensureFileSync(spath);
+        fs.writeFileSync(spath, item.strContent);
+      }
+      else {
+        fs.mkdirSync(spath);
       }
     }
   }
