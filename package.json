@@ -2,7 +2,6 @@
   "name": "codescapes-cli",
   "version": "0.0.1",
   "description": "",
-  "private": true,
   "exports": "./build/index.js",
   "bin": {
     "codescapes": "./build/index.js"
