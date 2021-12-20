@@ -11,7 +11,7 @@
     ],
     "rules": {
         "semi": "error",
-        "no-console": "warn",
+        "no-console": "error",
         "quotes": [
             "error",
             "single"

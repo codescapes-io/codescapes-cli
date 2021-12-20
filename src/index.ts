@@ -16,3 +16,4 @@ program
     });
 program.parse(process.argv);
 console.log('test');
+console.log('test');
