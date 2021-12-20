@@ -15,5 +15,3 @@ program
         process.exit(res);
     });
 program.parse(process.argv);
-console.log('test');
-console.log('test');
