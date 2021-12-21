@@ -62,8 +62,5 @@
   "homepage": "https://github.com/codescapes-io/codescapes-cli#readme",
   "lint-staged": {
     "*.{js,ts}": "eslint --cache --fix"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
   }
 }
